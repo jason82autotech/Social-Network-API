@@ -18,7 +18,7 @@ const UserController = {
     try {
       const user = await User.findById(userId);
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ error: `User with ID ${userId} not found` });
       }
       res.json(user);
     } catch (error) {
@@ -29,6 +29,9 @@ const UserController = {
   // Create a new user
   createUser: async (req, res) => {
     const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
     try {
       const user = await User.create({ username, email, password });
       res.status(201).json(user);
@@ -48,7 +51,7 @@ const UserController = {
         { new: true }
       );
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ error: `User with ID ${userId} not found` });
       }
       res.json(user);
     } catch (error) {
@@ -62,53 +65,53 @@ const UserController = {
     try {
       const user = await User.findByIdAndDelete(userId);
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ error: `User with ID ${userId} not found` });
       }
       res.json({ message: 'User deleted successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
-  
+
   // Add a friend to a user's friends list
   addFriend: async (req, res) => {
     const { userId, friendId } = req.params;
-  
+
     try {
       if (userId === friendId) {
         return res.status(400).json({ error: "Cannot add yourself as a friend." });
       }
-  
+
       const user = await User.findById(userId);
       if (user.friends.includes(friendId)) {
-        return res.status(400).json({ error: "User is already your friend." });
+        return res.status(400).json({ error: "Friend already exists in your friends list." });
       }
-  
+
       await User.findByIdAndUpdate(userId, { $push: { friends: friendId } });
-  
+
       res.json({ message: "Friend added successfully." });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Server error. Could not add friend." });
+      res.status(500).json({ error: `Server error. Could not add friend: ${error.message}` });
     }
   },
-  
+
   // Delete a friend from a user's friends list
   deleteFriend: async (req, res) => {
     const { userId, friendId } = req.params;
-  
+
     try {
       const user = await User.findById(userId);
       if (!user.friends.includes(friendId)) {
         return res.status(400).json({ error: "Friend does not exist in your friends list." });
       }
-  
+
       await User.findByIdAndUpdate(userId, { $pull: { friends: friendId } });
-  
+
       res.json({ message: "Friend deleted successfully." });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Server error. Could not delete friend." });
+      res.status(500).json({ error: `Server error. Could not delete friend: ${error.message}` });
     }
   }
 };

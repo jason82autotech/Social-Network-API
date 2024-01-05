@@ -22,4 +22,4 @@ router.route('/:thoughtId/reactions')
 router.route('/:thoughtId/reactions/:reactionId')
   .delete(ThoughtController.deleteReaction);
 
-export default router;
+  module.exports = router;

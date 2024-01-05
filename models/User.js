@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -37,10 +35,8 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.virtual('friendCount').get(function () {
+userSchema.virtual('friendCount').get(() => {
   return this.friends.length;
 });
 
-const User = mongoose.model('User', userSchema);
-
-export default User;
+export const User = model('User', userSchema);

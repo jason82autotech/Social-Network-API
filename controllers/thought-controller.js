@@ -1,10 +1,12 @@
+const { Thought, User } = require('./models'); // Import the Thought and User models
+
 const ThoughtController = {
   getAllThoughts: async (req, res) => {
     try {
       const thoughts = await Thought.find();
       res.json(thoughts);
     } catch (error) {
-      console.error('Server error. Could not retrieve thoughts.', error);
+      console.error('Server error. Could not retrieve thoughts:', error);
       res.status(500).json({ error: 'Server error. Could not retrieve thoughts.' });
     }
   },
@@ -19,7 +21,7 @@ const ThoughtController = {
       }
       res.json(thought);
     } catch (error) {
-      console.error('Server error. Could not retrieve the thought.', error);
+      console.error('Server error. Could not retrieve the thought:', error);
       res.status(500).json({ error: 'Server error. Could not retrieve the thought.' });
     }
   },
@@ -35,7 +37,7 @@ const ThoughtController = {
     try {
       const user = await User.findOne({ username });
       if (!user) {
-        return res.status(400).json({ error: "User does not exist. Cannot create the thought." });
+        return res.status(400).json({ error: 'User does not exist. Cannot create the thought.' });
       }
 
       const newThought = await Thought.create({ thoughtText, username });
@@ -43,11 +45,10 @@ const ThoughtController = {
 
       res.status(201).json(newThought);
     } catch (error) {
-      console.error('Server error. Could not create the thought.', error);
+      console.error('Server error. Could not create the thought:', error);
       res.status(500).json({ error: 'Server error. Could not create the thought.' });
     }
   },
-
 
   updateThought: async (req, res) => {
     const { thoughtId } = req.params;
@@ -66,7 +67,7 @@ const ThoughtController = {
 
       res.json(updatedThought);
     } catch (error) {
-      console.error('Server error. Could not update the thought.', error);
+      console.error('Server error. Could not update the thought:', error);
       res.status(500).json({ error: 'Server error. Could not update the thought.' });
     }
   },
@@ -81,9 +82,9 @@ const ThoughtController = {
         return res.status(404).json({ error: 'Thought not found.' });
       }
 
-      res.json({ message: "Thought deleted successfully." });
+      res.json({ message: 'Thought deleted successfully.' });
     } catch (error) {
-      console.error('Server error. Could not delete the thought.', error);
+      console.error('Server error. Could not delete the thought:', error);
       res.status(500).json({ error: 'Server error. Could not delete the thought.' });
     }
   },
@@ -121,7 +122,7 @@ const ThoughtController = {
 
       res.json(updatedThought);
     } catch (error) {
-      console.error('Server error. Could not add reaction.', error);
+      console.error('Server error. Could not add reaction:', error);
       res.status(500).json({ error: 'Server error. Could not add reaction.' });
     }
   },
@@ -148,7 +149,7 @@ const ThoughtController = {
 
       res.json(updatedThought);
     } catch (error) {
-      console.error('Server error. Could not delete reaction.', error);
+      console.error('Server error. Could not delete reaction:', error);
       res.status(500).json({ error: 'Server error. Could not delete reaction.' });
     }
   }
