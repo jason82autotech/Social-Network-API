@@ -1,25 +1,25 @@
-import express from 'express';
-import ThoughtController from '../controllers/thought-controller';
-
+const express = require("express");
+const thoughtController = require("../controllers/thought-controller");
 const router = express.Router();
 
 // /api/thoughts
 router.route('/')
-  .get(ThoughtController.getAllThoughts)
-  .post(ThoughtController.createThought);
+  .get(thoughtController.getAllThoughts)
+  .post(thoughtController.createThought);
 
 // /api/thoughts/:thoughtId
 router.route('/:thoughtId')
-  .get(ThoughtController.getThoughtById)
-  .put(ThoughtController.updateThought)
-  .delete(ThoughtController.deleteThought);
+  .get(thoughtController.getThoughtById)
+  .put(thoughtController.updateThought)
+  .delete(thoughtController.deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
 router.route('/:thoughtId/reactions')
-  .post(ThoughtController.createReaction);
+  .post(thoughtController.createReaction);
 
 // /api/thoughts/:thoughtId/reactions/:reactionId
 router.route('/:thoughtId/reactions/:reactionId')
-  .delete(ThoughtController.deleteReaction);
+  .delete(thoughtController.deleteReaction);
 
-  module.exports = router;
+module.exports = router;
+
